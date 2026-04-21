@@ -115,7 +115,7 @@ public class StructureCUI extends CUI {
 
         try {
             manager.sendServerPacket(player, status);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -132,7 +132,7 @@ public class StructureCUI extends CUI {
 
         try {
             manager.sendServerPacket(player, blockNbt);
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

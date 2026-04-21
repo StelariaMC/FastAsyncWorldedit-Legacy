@@ -159,7 +159,9 @@ import com.sk89q.worldedit.util.formatting.component.CommandUsageBox;
 import com.sk89q.worldedit.util.formatting.component.MessageBox;
 import com.sk89q.worldedit.world.biome.BaseBiome;
 import com.sk89q.worldedit.world.registry.BundledBlockData;
-import de.exlll.configlib.YamlConfigurations;
+//import de.exlll.configlib.YamlConfigurationProperties;
+//import de.exlll.configlib.YamlConfigurations;
+import com.boydti.fawe.config.FaweConfig;
 
 import javax.annotation.Nullable;
 import javax.management.InstanceAlreadyExistsException;
@@ -525,7 +527,7 @@ public class Fawe {
         MainUtil.copyFile(MainUtil.getJarFile(), "it/message.yml", null);
         // Setting up config.yml
         File file = new File(this.IMP.getDirectory(), "config.yml");
-        Settings.IMP = YamlConfigurations.update(file.toPath(), Settings.class);
+        Settings.IMP = FaweConfig.update(file.toPath(), Settings.class);
         Settings.IMP.PLATFORM = IMP.getPlatform().replace("\"", "");
         try {
             InputStream stream = getClass().getResourceAsStream("/fawe.properties");

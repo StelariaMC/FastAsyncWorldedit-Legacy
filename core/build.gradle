@@ -3,13 +3,14 @@ repositories {
 }
 dependencies {
     testImplementation 'junit:junit:4.12'
+    implementation 'com.github.luben:zstd-jni:1.5.5-2'
     implementation 'org.yaml:snakeyaml:1.16'
     implementation 'com.google.code.gson:gson:2.2.4'
-    implementation 'net.fabiozumbi12:redprotect:1.9.6'
+    // implementation 'net.fabiozumbi12:redprotect:1.9.6'
     implementation 'com.plotsquared:plotsquared-api:3.1'
     implementation "org.primesoft:BlocksHub:2.1.1"
-    implementation 'com.github.luben:zstd-jni:1.1.1'
-    implementation 'com.github.Exlll.ConfigLib:configlib-yaml:v4.2.0'
+    implementation 'de.exlll:configlib-yaml:4.8.1'
+    implementation 'de.exlll:configlib-yaml:4.8.1'
     implementation 'org.openjdk.nashorn:nashorn-core:15.4'
 //    implementation 'org.javassist:javassist:3.22.0-CR1'
     implementation 'co.aikar:fastutil-lite:1.0'

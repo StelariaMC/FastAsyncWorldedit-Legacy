@@ -25,11 +25,6 @@ import com.boydti.fawe.bukkit.util.image.BukkitImageViewer;
 import com.boydti.fawe.bukkit.v0.BukkitQueue_0;
 import com.boydti.fawe.bukkit.v0.BukkitQueue_All;
 import com.boydti.fawe.bukkit.v0.ChunkListener_9;
-import com.boydti.fawe.bukkit.v1_10.BukkitQueue_1_10;
-import com.boydti.fawe.bukkit.v1_11.BukkitQueue_1_11;
-import com.boydti.fawe.bukkit.v1_12.BukkitQueue_1_12;
-import com.boydti.fawe.bukkit.v1_12.NMSRegistryDumper;
-import com.boydti.fawe.bukkit.v1_7.BukkitQueue17;
 import com.boydti.fawe.bukkit.v1_8.BukkitQueue18R3;
 import com.boydti.fawe.bukkit.v1_9.BukkitQueue_1_9_R1;
 import com.boydti.fawe.config.BBC;
@@ -110,7 +105,8 @@ public class FaweBukkit implements IFawe, Listener {
                 BukkitPlayerBlockBag.inject(); // features
                 try {
                     FallbackRegistrationListener.inject(); // Fixes
-                } catch (Throwable ignore) {} // Not important at all
+                } catch (Throwable ignore) {
+                } // Not important at all
             } catch (Throwable e) {
                 debug("========= INJECTOR FAILED =========");
                 e.printStackTrace();
@@ -168,7 +164,8 @@ public class FaweBukkit implements IFawe, Listener {
     @Override
     public CUI getCUI(FawePlayer player) {
         if (Settings.IMP.EXPERIMENTAL.VANILLA_CUI) {
-            if (listeningCui && cuiListener == null) return null;
+            if (listeningCui && cuiListener == null)
+                return null;
             listeningCui = true;
             if (cuiListener == null) {
                 Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
@@ -193,7 +190,8 @@ public class FaweBukkit implements IFawe, Listener {
 
     @Override
     public synchronized ImageViewer getImageViewer(FawePlayer fp) {
-        if (listeningImages && imageListener == null) return null;
+        if (listeningImages && imageListener == null)
+            return null;
         try {
             listeningImages = true;
             registerPacketListener();
@@ -218,7 +216,8 @@ public class FaweBukkit implements IFawe, Listener {
                 this.imageListener = new BukkitImageListener(plugin);
             }
             return viewer;
-        } catch (Throwable ignore) {}
+        } catch (Throwable ignore) {
+        }
         return null;
     }
 
@@ -303,7 +302,8 @@ public class FaweBukkit implements IFawe, Listener {
                 services.forEach(service -> {
                     try {
                         service.getField("B_STATS_VERSION");
-                        ArrayList<RegisteredServiceProvider<?>> providers = new ArrayList(Bukkit.getServicesManager().getRegistrations(service));
+                        ArrayList<RegisteredServiceProvider<?>> providers = new ArrayList(
+                                Bukkit.getServicesManager().getRegistrations(service));
                         for (RegisteredServiceProvider<?> provider : providers) {
                             Object instance = provider.getProvider();
 
@@ -317,14 +317,24 @@ public class FaweBukkit implements IFawe, Listener {
                                 Field logFailedRequests = ReflectionUtils.findField(clazz, boolean.class);
                                 logFailedRequests.set(null, false);
                                 Field url = null;
-                                try { url = clazz.getDeclaredField("URL"); } catch (NoSuchFieldException ignore) {
-                                for (Field field : clazz.getDeclaredFields()) if (ReflectionUtils.setAccessible(field).get(null).toString().startsWith("http")) { url = field; break; }
+                                try {
+                                    url = clazz.getDeclaredField("URL");
+                                } catch (NoSuchFieldException ignore) {
+                                    for (Field field : clazz.getDeclaredFields())
+                                        if (ReflectionUtils.setAccessible(field).get(null).toString()
+                                                .startsWith("http")) {
+                                            url = field;
+                                            break;
+                                        }
                                 }
-                                if (url != null) ReflectionUtils.setFailsafeFieldValue(url, null, null);
-                            } catch (NoSuchFieldError | IllegalAccessException ignore) {}
-                            catch (Throwable e) {}
+                                if (url != null)
+                                    ReflectionUtils.setFailsafeFieldValue(url, null, null);
+                            } catch (NoSuchFieldError | IllegalAccessException ignore) {
+                            } catch (Throwable e) {
+                            }
                         }
-                    } catch (NoSuchFieldException ignored) { }
+                    } catch (NoSuchFieldException ignored) {
+                    }
                 });
             }
         });
@@ -346,7 +356,9 @@ public class FaweBukkit implements IFawe, Listener {
     }
 
     /**
-     * Vault isn't required, but used for setting player permissions (WorldEdit bypass)
+     * Vault isn't required, but used for setting player permissions (WorldEdit
+     * bypass)
+     * 
      * @return
      */
     @Override
@@ -385,7 +397,8 @@ public class FaweBukkit implements IFawe, Listener {
     public FaweQueue getNewQueue(String world, boolean fast) {
         if (playerChunk != (playerChunk = true)) {
             try {
-                Field fieldDirtyCount = BukkitReflectionUtils.getRefClass("{nms}.PlayerChunk").getField("dirtyCount").getRealField();
+                Field fieldDirtyCount = BukkitReflectionUtils.getRefClass("{nms}.PlayerChunk").getField("dirtyCount")
+                        .getRealField();
                 fieldDirtyCount.setAccessible(true);
                 int mod = fieldDirtyCount.getModifiers();
                 if ((mod & Modifier.VOLATILE) == 0) {
@@ -393,14 +406,17 @@ public class FaweBukkit implements IFawe, Listener {
                     modifiersField.setAccessible(true);
                     modifiersField.setInt(fieldDirtyCount, mod + Modifier.VOLATILE);
                 }
-            } catch (Throwable ignore) {}
+            } catch (Throwable ignore) {
+            }
         }
         try {
             return getQueue(world);
         } catch (Throwable ignore) {
             // Disable incompatible settings
-            Settings.IMP.QUEUE.PARALLEL_THREADS = 1; // BukkitAPI placer is too slow to parallel thread at the chunk level
-            Settings.IMP.HISTORY.COMBINE_STAGES = false; // Performing a chunk copy (if possible) wouldn't be faster using the BukkitAPI
+            Settings.IMP.QUEUE.PARALLEL_THREADS = 1; // BukkitAPI placer is too slow to parallel thread at the chunk
+                                                     // level
+            Settings.IMP.HISTORY.COMBINE_STAGES = false; // Performing a chunk copy (if possible) wouldn't be faster
+                                                         // using the BukkitAPI
             if (hasNMS) {
 
                 debug("====== NO NMS BLOCK PLACER FOUND ======");
@@ -428,17 +444,22 @@ public class FaweBukkit implements IFawe, Listener {
 
     /**
      * The FaweQueue is a core part of block placement<br>
-     *  - The queue returned here is used in the SetQueue class (SetQueue handles the implementation specific queue)<br>
-     *  - Block changes are grouped by chunk (as it's more efficient for lighting/packet sending)<br>
-     *  - The FaweQueue returned here will provide the wrapper around the chunk object (FaweChunk)<br>
-     *  - When a block change is requested, the SetQueue will first check if the chunk exists in the queue, or it will create and add it<br>
+     * - The queue returned here is used in the SetQueue class (SetQueue handles the
+     * implementation specific queue)<br>
+     * - Block changes are grouped by chunk (as it's more efficient for
+     * lighting/packet sending)<br>
+     * - The FaweQueue returned here will provide the wrapper around the chunk
+     * object (FaweChunk)<br>
+     * - When a block change is requested, the SetQueue will first check if the
+     * chunk exists in the queue, or it will create and add it<br>
      */
     @Override
     public FaweQueue getNewQueue(World world, boolean fast) {
         if (fast) {
             if (playerChunk != (playerChunk = true)) {
                 try {
-                    Field fieldDirtyCount = BukkitReflectionUtils.getRefClass("{nms}.PlayerChunk").getField("dirtyCount").getRealField();
+                    Field fieldDirtyCount = BukkitReflectionUtils.getRefClass("{nms}.PlayerChunk")
+                            .getField("dirtyCount").getRealField();
                     fieldDirtyCount.setAccessible(true);
                     int mod = fieldDirtyCount.getModifiers();
                     if ((mod & Modifier.VOLATILE) == 0) {
@@ -456,8 +477,10 @@ public class FaweBukkit implements IFawe, Listener {
                 error = ignore;
             }
             // Disable incompatible settings
-            Settings.IMP.QUEUE.PARALLEL_THREADS = 1; // BukkitAPI placer is too slow to parallel thread at the chunk level
-            Settings.IMP.HISTORY.COMBINE_STAGES = false; // Performing a chunk copy (if possible) wouldn't be faster using the BukkitAPI
+            Settings.IMP.QUEUE.PARALLEL_THREADS = 1; // BukkitAPI placer is too slow to parallel thread at the chunk
+                                                     // level
+            Settings.IMP.HISTORY.COMBINE_STAGES = false; // Performing a chunk copy (if possible) wouldn't be faster
+                                                         // using the BukkitAPI
             if (hasNMS) {
                 debug("====== NO NMS BLOCK PLACER FOUND ======");
                 debug("FAWE couldn't find a fast block placer");
@@ -492,7 +515,8 @@ public class FaweBukkit implements IFawe, Listener {
     }
 
     /**
-     * A mask manager handles region restrictions e.g. PlotSquared plots / WorldGuard regions
+     * A mask manager handles region restrictions e.g. PlotSquared plots /
+     * WorldGuard regions
      */
     @Override
     public Collection<FaweMaskManager> getMaskManagers() {
@@ -573,20 +597,21 @@ public class FaweBukkit implements IFawe, Listener {
 
         return managers;
     }
-//
-//    @EventHandler
-//    public void onWorldLoad(WorldLoadEvent event) {
-//        org.bukkit.World world = event.getWorld();
-//        world.setKeepSpawnInMemory(false);
-//        WorldServer nmsWorld = ((CraftWorld) world).getHandle();
-//        ChunkProviderServer provider = nmsWorld.getChunkProviderServer();
-//        try {
-//            Field fieldChunkLoader = provider.getClass().getDeclaredField("chunkLoader");
-//            ReflectionUtils.setFailsafeFieldValue(fieldChunkLoader, provider, new FaweChunkLoader());
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
-//    }
+    //
+    // @EventHandler
+    // public void onWorldLoad(WorldLoadEvent event) {
+    // org.bukkit.World world = event.getWorld();
+    // world.setKeepSpawnInMemory(false);
+    // WorldServer nmsWorld = ((CraftWorld) world).getHandle();
+    // ChunkProviderServer provider = nmsWorld.getChunkProviderServer();
+    // try {
+    // Field fieldChunkLoader = provider.getClass().getDeclaredField("chunkLoader");
+    // ReflectionUtils.setFailsafeFieldValue(fieldChunkLoader, provider, new
+    // FaweChunkLoader());
+    // } catch (Throwable e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
@@ -647,14 +672,16 @@ public class FaweBukkit implements IFawe, Listener {
                     if (tmp == Version.v1_12_R1) {
                         try {
                             System.out.println("Running 1.12 registry dumper!");
-                            NMSRegistryDumper dumper = new NMSRegistryDumper(MainUtil.getFile(plugin.getDataFolder(), "extrablocks.json"));
+                            NMSRegistryDumper dumper = new NMSRegistryDumper(
+                                    MainUtil.getFile(plugin.getDataFolder(), "extrablocks.json"));
                             dumper.run();
                         } catch (Throwable e) {
                             e.printStackTrace();
                         }
                     }
                     break;
-                } catch (IllegalStateException e) {}
+                } catch (IllegalStateException e) {
+                }
             }
         }
         return tmp;
@@ -674,18 +701,10 @@ public class FaweBukkit implements IFawe, Listener {
 
     private FaweQueue getQueue(World world) {
         switch (getVersion()) {
-            case v1_7_R4:
-                return new BukkitQueue17(world);
             case v1_8_R3:
                 return new BukkitQueue18R3(world);
             case v1_9_R2:
                 return new BukkitQueue_1_9_R1(world);
-            case v1_10_R1:
-                return new BukkitQueue_1_10(world);
-            case v1_11_R1:
-                return new BukkitQueue_1_11(world);
-            case v1_12_R1:
-                return new BukkitQueue_1_12(world);
             default:
             case NONE:
                 return new BukkitQueue_All(world);
@@ -694,18 +713,10 @@ public class FaweBukkit implements IFawe, Listener {
 
     private FaweQueue getQueue(String world) {
         switch (getVersion()) {
-            case v1_7_R4:
-                return new BukkitQueue17(world);
             case v1_8_R3:
                 return new BukkitQueue18R3(world);
             case v1_9_R2:
                 return new BukkitQueue_1_9_R1(world);
-            case v1_10_R1:
-                return new BukkitQueue_1_10(world);
-            case v1_11_R1:
-                return new BukkitQueue_1_11(world);
-            case v1_12_R1:
-                return new BukkitQueue_1_12(world);
             default:
             case NONE:
                 return new BukkitQueue_All(world);

@@ -5,7 +5,6 @@ import com.boydti.fawe.object.FawePlayer;
 import de.exlll.configlib.Comment;
 import de.exlll.configlib.Configuration;
 import de.exlll.configlib.Ignore;
-import de.exlll.configlib.YamlConfigurations;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -474,8 +473,8 @@ public class Settings {
     }
 
     public void reload(File file) {
-        YamlConfigurations.save(file.toPath(), Settings.class, IMP);
-        YamlConfigurations.update(file.toPath(), Settings.class);
+        FaweConfig.save(file.toPath(), Settings.class, IMP);
+        FaweConfig.update(file.toPath(), Settings.class);
     }
 
     public FaweLimit getLimit(FawePlayer player) {

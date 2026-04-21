@@ -185,10 +185,8 @@ public class CFIPacketListener implements Listener {
                         PacketContainer reply = new PacketContainer(PacketType.Play.Client.TELEPORT_ACCEPT);
                         reply.getIntegers().write(0, id);
                         try {
-                            protocolmanager.recieveClientPacket(player, reply);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
+                            protocolmanager.receiveClientPacket(player, reply);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                         event.setCancelled(true);
@@ -256,7 +254,7 @@ public class CFIPacketListener implements Listener {
         container.getBlockData().write(0, bd);
         try {
             protocolmanager.sendWirePacket(plr, WirePacket.fromPacket(container));
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
