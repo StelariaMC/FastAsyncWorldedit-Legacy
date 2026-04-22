@@ -53,7 +53,7 @@ public class FaweConfig {
     }
 
     public static <T> T update(Path file, Class<T> clazz) {
-        return loadOrUpdate(file, clazz, true);
+        return loadOrUpdate(file, clazz, !Files.exists(file));
     }
 
     public static <T> void save(Path file, Class<T> clazz, T config) {

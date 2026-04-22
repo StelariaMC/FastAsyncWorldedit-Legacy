@@ -473,8 +473,7 @@ public class Settings {
     }
 
     public void reload(File file) {
-        FaweConfig.save(file.toPath(), Settings.class, IMP);
-        FaweConfig.update(file.toPath(), Settings.class);
+        FaweConfig.loadOrUpdate(file.toPath(), Settings.class, false);
     }
 
     public FaweLimit getLimit(FawePlayer player) {
